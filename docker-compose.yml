@@ -1,30 +1,25 @@
-version: "3.7"
+version: "3.3"
 
 services:
   flaskapp:
     build:
       context: ./
       dockerfile: api.Dockerfile
+    depends_on: 
+      - redis
     ports:
       - "5000:5000"
     networks:
       - web_nw
-    gui:
-        image: yourimagename/gui
-        build:
-            context: gui/
-        ports:
-        - 8080:8080
-        depends_on: 
-        - redis
+        
 
 # from your apps you can reach Redis IP with its fqdn "redis"
-    redis:
-        image: redis
-        ports:
-        - 6379:6379
-        networks:
-        - web_nw
+  redis:
+      image: redis
+      ports:
+      - 6379:6379
+      networks:
+      - web_nw
 
 networks:
   web_nw:
