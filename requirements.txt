@@ -2,3 +2,5 @@ pytest
 flask
 redis
 gunicorn==19.9.0
+requests
+python-firebase
