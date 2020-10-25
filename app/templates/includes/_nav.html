@@ -1,0 +1,29 @@
+<nav>
+    <ul>
+        <li><a href="/">Covid Relief</a></li>
+    </ul>
+    <ul>
+        <li><a href="/">Home</a></li>
+        {% if session["usr"] %}
+        <li><a href="/aprobar">Aprobar post</a></li>
+        {% endif %}
+        {% if session["usr"] %}
+        <li><a href="/estadisticas">Estadísticas</a></li>
+        {% endif %}
+        {% if not session["usr"] %}
+        <li><a href="/signup">SignUp</a></li>
+        <li><a href="/login">Login</a></li>
+        {% endif %}
+
+        {% if session["email"] %}
+        <li>{{session["email"]}} </li>
+        {% endif %}
+
+        {% if session["usr"] %}
+        <li><a href="/logout"> Logout</a></li>
+        {% endif %}
+
+
+    </ul>
+   
+</nav>
