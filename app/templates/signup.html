@@ -1,29 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Covid relief sign up</title>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'main.css') }}">
-</head>
-<body>
-<div class="wrapper fadeInDown">
-  <div id="formContent">
-    <!-- Tabs Titles -->
-    <a href="/login"><h2 class="inactive underlineHover"> Sign In </h2></a>
-    <h2 class="active">Sign Up </h2>
+{% extends "layout.html" %}
 
-    <!-- Icon -->
-    <div class="fadeIn first">
-      <img src="{{ url_for('static', filename = 'user.png') }}" id="icon" alt="User Icon" />
-    </div>
+{% block content %}
 
-    <!-- Login Form -->
-    <form action="/register" method="POST">
-      <input type="email" id="login" class="fadeIn second" name="email" placeholder="email">
-      <input type="password" id="password" class="fadeIn third" name="pass" placeholder="password">
-      <input type="submit" class="fadeIn fourth" value="Sign Up">
+  
+ 
+
+    <form method="POST" action="/signup">
+        {% if message %}
+            <p class="error">{{message}}</p>
+        {% endif %}
+        <h2>Signup</h2>
+        <div class="form-control">
+            <label for="email">Email:</label>
+            <input type="email" name="email" placeholder="Email">
+        </div>
+        <div class="form-control">
+            <label for="password">Password:</label>
+            <input type="password" name="password" placeholder="Password">
+        </div>
+        <input type="submit" value="Sign Up">
     </form>
 
-  </div>
-</div>
-</body>
-</html>
+
+{% endblock %}
