@@ -3,8 +3,13 @@ from flask import Flask, jsonify, render_template, request, redirect, flash, ses
 import requests
 import json
 import pyrebase
+from firebase import firebase
 app = Flask(__name__)
 import os,optparse
+
+firebase = firebase.FirebaseApplication('https://covid-relief-1d6c0.firebaseio.com/', None)
+medicina = firebase.get('/covid-relief-1d6c0/medicina', '')
+print(medicina)
 
 config = {
   "apiKey": "AIzaSyAkUg7mNxW-W1Oqe_Mn_F6wogH6wlz3lRc",
@@ -32,6 +37,13 @@ def login():
 @app.route('/signup')
 def signup():
     return render_template("signup.html")
+
+@app.route('/estadisticas')
+def posts():
+    #db_events = db.child("business").get().val().values()
+    #return render_template('estadisticas.html', business=db_events)
+
+    return render_template("estadisticas.html")
 
 #Welcome page
 @app.route("/welcome")
