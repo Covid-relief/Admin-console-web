@@ -41,7 +41,7 @@ def signup():
 @app.route('/estadisticas')
 def posts():
     #db_events = db.child("business").get().val().values()
-    #return render_template('posts.html', business=db_events)
+    #return render_template('estadisticas.html', business=db_events)
 
     return render_template("estadisticas.html")
 
