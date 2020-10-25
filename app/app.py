@@ -1,158 +1,191 @@
-#FLASK
-from flask import Flask, jsonify, render_template, request, redirect, flash, session, abort, url_for
-import requests
-import json
+from functools import wraps
+import sys
+import os
+from flask import Flask, render_template, redirect, request, url_for, session
+#coming from pyrebase4
 import pyrebase
-from firebase import firebase
-app = Flask(__name__)
-import os,optparse
 
-firebase = firebase.FirebaseApplication('https://covid-relief-1d6c0.firebaseio.com/', None)
-medicina = firebase.get('/covid-relief-1d6c0/medicina', '')
-print(medicina)
-
+#firebase config
 config = {
-  "apiKey": "AIzaSyAkUg7mNxW-W1Oqe_Mn_F6wogH6wlz3lRc",
-  "authDomain": "covid-relief-1d6c0.firebaseapp.com",
-  "databaseURL": "https://covid-relief-1d6c0.firebaseio.com",
-  "storageBucket": "covid-relief-1d6c0.appspot.com"
+    "apiKey": "AIzaSyAkUg7mNxW-W1Oqe_Mn_F6wogH6wlz3lRc",
+    "authDomain": "covid-relief-1d6c0.firebaseapp.com",
+    "databaseURL": "https://covid-relief-1d6c0.firebaseio.com",
+    "storageBucket": "covid-relief-1d6c0.appspot.com",
+    "projectId": "covid-relief-1d6c0",
+    "messagingSenderId": "965781285698",
+    "appId": "1:965781285698:android:9ce59d336ebb319d3036db"
+  
 }
 
-#initialize firebase
+#init firebase
 firebase = pyrebase.initialize_app(config)
+#auth instance
 auth = firebase.auth()
-db = firebase.database()
+#real time database instance
+db = firebase.database();
 
-#Initialze person as dictionary
-person = {"is_logged_in": False, "email": "", "uid": ""}
 
+#new instance of Flask
+app = Flask(__name__)
+#secret key for the session
+app.secret_key = os.urandom(24)
+
+#decorator to protect routes
+def isAuthenticated(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        #check for the variable that pyrebase creates
+        if not auth.current_user != None:
+            return redirect(url_for('signup'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+#index route
 @app.route("/")
-def home():
-    return render_template("index.html")
+def index():
+    allposts = db.child("Posts").get()
+    #print(allposts.val(), file=sys.stderr)
+    if allposts.val() == None:
+      #print(posts, file=sys.stderr)
+      return render_template("index.html")
+    else:
+      return render_template("index.html", posts=allposts)
 
-@app.route('/login')
-def login():
-    return render_template("login.html")
+@app.route("/aprobar")
+def aprobar():
+    allposts = db.child("Posts").get()
+    #print(allposts.val(), file=sys.stderr)
+    if allposts.val() == None:
+      #print(posts, file=sys.stderr)
+      return render_template("aprobar.html")
+    else:
+      return render_template("aprobar.html", posts=allposts)
 
-@app.route('/signup')
-def signup():
-    return render_template("signup.html")
-
-@app.route('/estadisticas')
-def posts():
-    #db_events = db.child("business").get().val().values()
-    #return render_template('estadisticas.html', business=db_events)
-
+@app.route("/estadisticas")
+def estadisticas():
     return render_template("estadisticas.html")
 
-#Welcome page
-@app.route("/welcome")
-def welcome():
-    if person["is_logged_in"] == True:
-        return render_template("welcome.html", email = person["email"])
-    else:
-        return redirect(url_for('login'))
+#signup route
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    if request.method == "POST":
+      #get the request form data
+      email = request.form["email"]
+      password = request.form["password"]
+      try:
+        #create the user
+        auth.create_user_with_email_and_password(email, password);
+        #login the user right away
+        user = auth.sign_in_with_email_and_password(email, password)   
+        #session
+        user_id = user['idToken']
+        user_email = email
+        session['usr'] = user_id
+        session["email"] = user_email
+        return redirect("/")
+      except:
+        return render_template("login.html", message="The email is already taken, try another one, please" )  
 
-#If someone clicks on login, they are redirected to /result
-@app.route("/result", methods = ["POST", "GET"])
-def result():
-    if request.method == "POST":        #Only if data has been posted
-        result = request.form           #Get the data
-        email = result["email"]
-        password = result["pass"]
-        try:
-            #Try signing in the user with the given information
-            user = auth.sign_in_with_email_and_password(email, password)
-            #Insert the user data in the global person
-            global person
-            person["is_logged_in"] = True
-            person["email"] = user["email"]
-            person["uid"] = user["localId"]
-            #Get the name of the user
-            data = db.child("users").get()
-            person["email"] = data.val()[person["uid"]]["email"]
-            #Redirect to welcome page
-            return redirect(url_for('welcome'))
-        except:
-            #If there is any error, redirect back to login
-            return redirect(url_for('login'))
-    else:
-        if person["is_logged_in"] == True:
-            return redirect(url_for('welcome'))
-        else:
-            return redirect(url_for('login'))
+    return render_template("signup.html")
 
-#If someone clicks on register, they are redirected to /register
-@app.route("/register", methods = ["POST", "GET"])
-def register():
-    if request.method == "POST":        #Only listen to POST
-        result = request.form           #Get the data submitted
-        email = result["email"]
-        password = result["pass"]
-        #name = result["name"]
-        try:
-            #Try creating the user account using the provided data
-            auth.create_user_with_email_and_password(email, password)
-            #Login the user
-            user = auth.sign_in_with_email_and_password(email, password)
-            #Add data to global person
-            global person
-            person["is_logged_in"] = True
-            person["email"] = user["email"]
-            person["uid"] = user["localId"]
-            #person["name"] = name
-            #Append data to the firebase realtime database
-            data = {"email": email}
-            db.child("users").child(person["uid"]).set(data)
-            #Go to welcome page
-            return redirect(url_for('welcome'))
-        except:
-            #If there is any error, redirect to register
-            return redirect(url_for('register'))
 
-    else:
-        if person["is_logged_in"] == True:
-            return redirect(url_for('welcome'))
-        else:
-            return redirect(url_for('register'))
+#login route
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+      #get the request data
+      email = request.form["email"]
+      password = request.form["password"]
+      try:
+        #login the user
+        user = auth.sign_in_with_email_and_password(email, password)
+        #set the session
+        user_id = user['idToken']
+        user_email = email
+        session['usr'] = user_id
+        session["email"] = user_email
+        return redirect("/")
+      
+      except:
+        return render_template("login.html", message="Wrong Credentials" )  
 
-@app.route("/data")
-def data():
-    url = "https://covid-relief-1d6c0.firebaseio.com/.json"
-    params = dict(
+     
+    return render_template("login.html")
 
-    )
-    #resp = requests.get(url=url, params=params)
-    resp = requests.get(url=url)
-    if (resp.status_code == 200):
-        data = resp.json()
-        return data
-    else:
-        print(str(resp.status_code) + " " + str(resp))
-        print(result)
-    return ""
+#logout route
+@app.route("/logout")
+def logout():
+    #remove the token setting the user to None
+    auth.current_user = None
+    #also remove the session
+    #session['usr'] = ""
+    #session["email"] = ""
+    session.clear()
+    return redirect("/");
 
-@app.route("/approve")
-def approve():
-    idPost = request.args.get('post')
-    category = request.args.get('category')
-    url = "https://covid-relief-1d6c0.firebaseio.com/"
-    params = dict(
+#create form
+@app.route("/create", methods=["GET", "POST"])
+@isAuthenticated
+def create():
+ 
+  if request.method == "POST":
+    #get the request data
+    title = request.form["title"]
+    content = request.form["content"]
 
-    )
-    print(url+category+"/"+idPost+".json")
-    #resp = requests.get(url=url, params=params)
-    resp = requests.get(url=url+category+"/"+idPost+".json")
-    if (resp.status_code == 200):
-        data = resp.json()
-        data['Estado'] = "approved"
-        resp_put = requests.put(url=url+category+"/"+idPost+".json", data=json.dumps(data))
-        return {'response':str(resp_put.status_code), 'data':data, 'type':str(type(data))}
-    else:
-        print(str(resp.status_code) + " " + str(resp))
-        print(result)
-    return ""
+    post = {
+      "title": title,
+      "content": content,
+      "author": session["email"]
+    }
 
+    try:
+      #print(title, content, file=sys.stderr)
+
+      #push the post object to the database
+      db.child("Posts").push(post)
+      return redirect("/")
+    except:
+      return render_template("create.html", message= "Something wrong happened")  
+
+  return render_template("create.html")
+
+
+@app.route("/post/<id>")
+@isAuthenticated
+def post(id):
+    orderedDict = db.child("Posts").order_by_key().equal_to(id).limit_to_first(1).get()
+    print(orderedDict, file=sys.stderr)
+        
+    return render_template("post.html", data=orderedDict)
+
+@app.route("/edit/<id>", methods=["GET", "POST"])
+def edit(id):
+    if request.method == "POST":
+
+      title = request.form["title"]
+      content = request.form["content"]
+
+      post = {
+        "title": title,
+        "content": content,
+        "author": session["email"]
+      }
+
+      #update the post
+      db.child("Posts").child(id).update(post)
+      return redirect("/post/" + id) 
+    
+    
+    orderedDict =  db.child("Posts").order_by_key().equal_to(id).limit_to_first(1).get()
+    return render_template("edit.html", data=orderedDict)
+
+@app.route("/delete/<id>", methods=["POST"])
+def delete(id):
+    db.child("Posts").child(id).remove()
+    return redirect("/")
+
+
+#run the main script
 if __name__ == "__main__":
-    debug=False
-    app.run(host="0.0.0.0",port=80,debug=debug)
+    app.run(debug=True)
