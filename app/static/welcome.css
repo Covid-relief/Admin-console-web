@@ -1,10 +1,7 @@
 body{
 	margin: 0;
-	background-position: center;
-    background-size: cover;
-	background-image: url("resources/back1.jpg");
 	background-color: #212121;
-	min-height: 100%;
+
 }
 
 .main{
