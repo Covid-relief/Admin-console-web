@@ -53,7 +53,7 @@ def index():
 
 @app.route("/aprobar")
 def aprobar():
-    allposts = db.child("Posts").get()
+    allposts = db.child("business").get()
     #print(allposts.val(), file=sys.stderr)
     if allposts.val() == None:
       #print(posts, file=sys.stderr)
