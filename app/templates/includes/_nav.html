@@ -7,8 +7,13 @@
         {% if session["usr"] %}
         <li><a href="/aprobar">Aprobar post</a></li>
         {% endif %}
+
         {% if session["usr"] %}
         <li><a href="/estadisticas">Estadísticas</a></li>
+        {% endif %}
+
+        {% if session["usr"] %}
+        <li><a href="/post">Edit</a></li>
         {% endif %}
 
         {% if session["usr"] %}

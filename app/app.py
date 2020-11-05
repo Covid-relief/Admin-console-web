@@ -19,7 +19,7 @@ config = {
 
 #init firebase
 firebase = pyrebase.initialize_app(config)
-#auth instance
+#auth instanceVERCEL_GITHUB_COMMIT_ORG
 auth = firebase.auth()
 #real time database instance
 db = firebase.database();
