@@ -26,8 +26,9 @@ nav ul{
 
 nav ul li{
     list-style: none;
-    display: inline-block;
+    display: block;
     margin: 0 10px;
+    font-size: 14px;
     
 }
 
@@ -35,7 +36,7 @@ nav ul li a{
     text-decoration: none;
     display: block;
     color: #222;
-    text-transform: lowercase;
+    text-transform: initial;
     font-size: 14px;
 }
 
