@@ -43,23 +43,27 @@ def isAuthenticated(f):
 #index route
 @app.route("/")
 def index():
-    allposts = db.child("Posts").get()
+    return render_template("index.html")
+
+
+@app.route("/test")
+def test():
+    business = db.child("business").get().val().values()
+    medicina = db.child("medicina").get().val().values()
+    psicologia = db.child("psicología").get().val().values()
+    tecnologia = db.child("tecnología").get().val().values()
     #print(allposts.val(), file=sys.stderr)
-    if allposts.val() == None:
-      #print(posts, file=sys.stderr)
-      return render_template("index.html")
-    else:
-      return render_template("index.html", posts=allposts)
+    return render_template("test.html", business = business, medicina = medicina, psicologia = psicologia, tecnologia = tecnologia)
 
 @app.route("/aprobar")
 def aprobar():
-    allposts = db.child("business").get()
-    #print(allposts.val(), file=sys.stderr)
-    if allposts.val() == None:
-      #print(posts, file=sys.stderr)
-      return render_template("aprobar.html")
-    else:
-      return render_template("aprobar.html", posts=allposts)
+    business = db.child("business").get().val().values()
+    medicina = db.child("medicina").get().val().values()
+    psicologia = db.child("psicología").get().val().values()
+    tecnologia = db.child("tecnología").get().val().values()
+    # print(allposts.val(), file=sys.stderr)
+    return render_template("test.html", business=business, medicina=medicina, psicologia=psicologia,
+                           tecnologia=tecnologia)
 
 @app.route("/estadisticas")
 def estadisticas():
@@ -121,68 +125,6 @@ def logout():
     #session['usr'] = ""
     #session["email"] = ""
     session.clear()
-    return redirect("/");
-
-#create form
-@app.route("/create", methods=["GET", "POST"])
-@isAuthenticated
-def create():
- 
-  if request.method == "POST":
-    #get the request data
-    title = request.form["title"]
-    content = request.form["content"]
-
-    post = {
-      "title": title,
-      "content": content,
-      "author": session["email"]
-    }
-
-    try:
-      #print(title, content, file=sys.stderr)
-
-      #push the post object to the database
-      db.child("Posts").push(post)
-      return redirect("/")
-    except:
-      return render_template("create.html", message= "Something wrong happened")  
-
-  return render_template("create.html")
-
-
-@app.route("/post/<id>")
-@isAuthenticated
-def post(id):
-    orderedDict = db.child("Posts").order_by_key().equal_to(id).limit_to_first(1).get()
-    print(orderedDict, file=sys.stderr)
-        
-    return render_template("post.html", data=orderedDict)
-
-@app.route("/edit/<id>", methods=["GET", "POST"])
-def edit(id):
-    if request.method == "POST":
-
-      title = request.form["title"]
-      content = request.form["content"]
-
-      post = {
-        "title": title,
-        "content": content,
-        "author": session["email"]
-      }
-
-      #update the post
-      db.child("Posts").child(id).update(post)
-      return redirect("/post/" + id) 
-    
-    
-    orderedDict =  db.child("Posts").order_by_key().equal_to(id).limit_to_first(1).get()
-    return render_template("edit.html", data=orderedDict)
-
-@app.route("/delete/<id>", methods=["POST"])
-def delete(id):
-    db.child("Posts").child(id).remove()
     return redirect("/")
 
 

@@ -9,7 +9,7 @@
             <p>{{p.val().author}}</p>
 
             <div>{{p.val().content}}</div>
-            
+
             {% if session["usr"] %}
                 {% if session["email"] == p.val().author %}
                 <a href="/edit/{{p.key()}}">Edit Post</a>
