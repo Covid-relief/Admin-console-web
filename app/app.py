@@ -4,6 +4,8 @@ import os
 from flask import Flask, render_template, redirect, request, url_for, session
 #coming from pyrebase4
 import pyrebase
+import requests
+import json
 
 #firebase config
 config = {
@@ -52,8 +54,10 @@ def test():
     medicina = db.child("medicina").get().val().values()
     psicologia = db.child("psicología").get().val().values()
     tecnologia = db.child("tecnología").get().val().values()
+    approveBusiness = db.child("business").get()
     #print(allposts.val(), file=sys.stderr)
-    return render_template("test.html", business = business, medicina = medicina, psicologia = psicologia, tecnologia = tecnologia)
+    return render_template("test.html", business = business, medicina = medicina, psicologia = psicologia, tecnologia = tecnologia,
+                           approveBusiness = approveBusiness)
 
 @app.route("/aprobar")
 def aprobar():
@@ -126,6 +130,43 @@ def logout():
     #session["email"] = ""
     session.clear()
     return redirect("/")
+
+@app.route("/data")
+def data():
+    url = "https://covid-relief-1d6c0.firebaseio.com/.json"
+    params = dict(
+
+    )
+    #resp = requests.get(url=url, params=params)
+    resp = requests.get(url=url)
+    if (resp.status_code == 200):
+        data = resp.json()
+        return data
+    else:
+        print(str(resp.status_code) + " " + str(resp))
+        print(result)
+    return ""
+
+@app.route("/approve")
+def approve():
+    idPost = request.args.get('post')
+    category = request.args.get('category')
+    url = "https://covid-relief-1d6c0.firebaseio.com/"
+    params = dict(
+
+    )
+    print(url+category+"/"+idPost+".json")
+    #resp = requests.get(url=url, params=params)
+    resp = requests.get(url=url+category+"/"+idPost+".json")
+    if (resp.status_code == 200):
+        data = resp.json()
+        data['Estado'] = "approved"
+        resp_put = requests.put(url=url+category+"/"+idPost+".json", data=json.dumps(data))
+        return {'response':str(resp_put.status_code), 'data':data, 'type':str(type(data))}
+    else:
+        print(str(resp.status_code) + " " + str(resp))
+        print(result)
+    return ""
 
 
 #run the main script

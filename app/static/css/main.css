@@ -36,7 +36,7 @@ nav ul li a{
     text-decoration: none;
     display: block;
     color: #222;
-    text-transform: initial;
+    text-transform: lowercase;
     font-size: 14px;
 }
 
