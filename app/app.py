@@ -61,12 +61,24 @@ def test():
 
 @app.route("/aprobar")
 def aprobar():
-    business = db.child("business").get().val().values()
+    business = []
+    business_keys = []
+    business_response = db.child("business").get()
+    counter=0
+    for keys in business_response.val():
+        print(type(keys))
+        business_keys.append(keys)
+    for dict_business in business_response.val().values():
+        dict_business["ID"] = business_keys[counter]
+        business.append(dict_business)
+        counter+=1
+
     medicina = db.child("medicina").get().val().values()
     psicologia = db.child("psicología").get().val().values()
     tecnologia = db.child("tecnología").get().val().values()
+
     # print(allposts.val(), file=sys.stderr)
-    return render_template("test.html", business=business, medicina=medicina, psicologia=psicologia,
+    return render_template("aprobar.html", business=business, medicina=medicina, psicologia=psicologia,
                            tecnologia=tecnologia)
 
 @app.route("/estadisticas")
@@ -171,4 +183,4 @@ def approve():
 
 #run the main script
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=80, debug=True)

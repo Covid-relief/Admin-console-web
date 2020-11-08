@@ -8,7 +8,11 @@ ADD requirements.txt home
 
 WORKDIR /home
 
-RUN pip install -r requirements.txt
+RUN apk add --no-cache --virtual .build-deps gcc musl-dev \
+    && pip install --no-cache-dir -r requirements.txt \
+    && apk del .build-deps
+
+# RUN pip install -r requirements.txt
 
 EXPOSE 80
 

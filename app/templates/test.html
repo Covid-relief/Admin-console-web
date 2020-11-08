@@ -7,7 +7,7 @@
 <!--
 BUSINESS
 -->
-    <h1 align="left">Business</h1>
+    <h1 align="left">Businesss</h1>
 
  {% if business %}
 
@@ -20,6 +20,8 @@ BUSINESS
             <div class="card" style="width: 450px">
                 <h5 class="card-title">{{p.Titulo}}</h5>
                 <p style="color:gray">{{p.Fecha}}</p>
+                <p style="color:gray">{{p}}</p>
+
                 {% if p.Imagen %}
                     <img class="card-img-top" src="{{p.Imagen}}" alt="Card image cap" style="width: 450px; height: 450px" >
                 {% endif %}

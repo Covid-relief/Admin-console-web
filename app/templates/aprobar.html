@@ -20,6 +20,7 @@ BUSINESS
             <div class="card" style="width: 450px">
                 <h5 class="card-title">{{p.Titulo}}</h5>
                 <p style="color:gray">{{p.Fecha}}</p>
+                <p style="color:gray"> p {{p}}</p>
                 {% if p.Imagen %}
                     <img class="card-img-top" src="{{p.Imagen}}" alt="Card image cap" style="width: 450px; height: 450px" >
                 {% endif %}
@@ -40,8 +41,8 @@ BUSINESS
 
                     <p class="card-text">{{p.Descripcion}}</p>
                     <div>
-                        <a href="#" class="btn btn-success btn-lg">Aprobar</a>
-                        <a href="#" class="btn btn-danger btn-lg">Desaprobar</a>
+                        <a href="/approve?post={{p.ID}}&category=business" class="btn btn-success btn-lg">Aprobar</a>
+                        <a href="#" class="btn btn-danger btn-lg">Denegar</a>
                     </div>
                 </div>
             </div>
@@ -99,7 +100,7 @@ MEDICINA
                     <p class="card-text">{{p.Descripcion}}</p>
                     <div>
                         <a href="#" class="btn btn-success btn-lg">Aprobar</a>
-                        <a href="#" class="btn btn-danger btn-lg">Desaprobar</a>
+                        <a href="#" class="btn btn-danger btn-lg">Denegar</a>
                     </div>
                 </div>
             </div>
@@ -160,7 +161,7 @@ PSICOLOGÍA
                     <p class="card-text">{{p.Descripcion}}</p>
                     <div>
                         <a href="#" class="btn btn-success btn-lg">Aprobar</a>
-                        <a href="#" class="btn btn-danger btn-lg">Desaprobar</a>
+                        <a href="#" class="btn btn-danger btn-lg">Denegar</a>
                     </div>
                 </div>
             </div>
@@ -222,7 +223,7 @@ TECNOLOGÍA
                     <p class="card-text">{{p.Descripcion}}</p>
                     <div>
                         <a href="#" class="btn btn-success btn-lg">Aprobar</a>
-                        <a href="#" class="btn btn-danger btn-lg">Desaprobar</a>
+                        <a href="#" class="btn btn-danger btn-lg">Denegar</a>
                     </div>
                 </div>
             </div>
