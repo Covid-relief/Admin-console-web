@@ -180,6 +180,27 @@ def approve():
         print(result)
     return ""
 
+@app.route("/deny")
+def approve():
+    idPost = request.args.get('post')
+    category = request.args.get('category')
+    url = "https://covid-relief-1d6c0.firebaseio.com/"
+    params = dict(
+
+    )
+    print(url+category+"/"+idPost+".json")
+    #resp = requests.get(url=url, params=params)
+    resp = requests.get(url=url+category+"/"+idPost+".json")
+    if (resp.status_code == 200):
+        data = resp.json()
+        data['Estado'] = "denied"
+        resp_put = requests.put(url=url+category+"/"+idPost+".json", data=json.dumps(data))
+        return {'response':str(resp_put.status_code), 'data':data, 'type':str(type(data))}
+    else:
+        print(str(resp.status_code) + " " + str(resp))
+        print(result)
+    return ""
+
 
 #run the main script
 if __name__ == "__main__":
