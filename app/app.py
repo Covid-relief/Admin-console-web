@@ -73,9 +73,43 @@ def aprobar():
         business.append(dict_business)
         counter+=1
 
-    medicina = db.child("medicina").get().val().values()
-    psicologia = db.child("psicología").get().val().values()
-    tecnologia = db.child("tecnología").get().val().values()
+    medicina = []
+    medicina_keys = []
+    medicina_response = db.child("medicina").get()
+    counter=0
+    for keys in medicina_response.val():
+        print(type(keys))
+        medicina_keys.append(keys)
+    for dict_medicina in medicina_response.val().values():
+        print("dict", type(dict_medicina))
+        print(dict_medicina)
+        dict_medicina["ID"] = medicina_keys[counter]
+        medicina.append(dict_medicina)
+        counter+=1
+
+    psicologia = []
+    psicologia_keys = []
+    psicologia_response = db.child("psicología").get()
+    counter=0
+    for keys in psicologia_response.val():
+        print(type(keys))
+        psicologia_keys.append(keys)
+    for dict_psicologia in psicologia_response.val().values():
+        dict_psicologia["ID"] = psicologia_keys[counter]
+        psicologia.append(dict_psicologia)
+        counter+=1
+
+    tecnologia = []
+    tecnologia_keys = []
+    tecnologia_response = db.child("tecnología").get()
+    counter=0
+    for keys in tecnologia_response.val():
+        print(type(keys))
+        tecnologia_keys.append(keys)
+    for dict_tecnologia in tecnologia_response.val().values():
+        dict_tecnologia["ID"] = tecnologia_keys[counter]
+        tecnologia.append(dict_tecnologia)
+        counter+=1
 
     # print(allposts.val(), file=sys.stderr)
     return render_template("aprobar.html", business=business, medicina=medicina, psicologia=psicologia,
@@ -181,7 +215,7 @@ def approve():
     return ""
 
 @app.route("/deny")
-def approve():
+def deny():
     idPost = request.args.get('post')
     category = request.args.get('category')
     url = "https://covid-relief-1d6c0.firebaseio.com/"
