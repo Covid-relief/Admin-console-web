@@ -11,11 +11,48 @@
                 span_text.lastIndexOf("post=") + 5, 
                 span_text.lastIndexOf("&")
             );
+            
+            var category = span_text.substring(
+                span_text.lastIndexOf("category=") + 9, 
+                span_text.length
+            );
 
             $.get("/approve?"+$(this).find('span').text(), function(data, status){
                 if(data.response == 200) {
                     alert("Publicación aprobada");
                     $('#'+id).hide()
+                    if(category=='business'){
+                        var bc = $('#business_count')
+                        if(bc.text() == 1){
+                            location.reload();
+                        } else {
+                            bc.text(parseInt(bc.text())-1)
+                        }
+                    }
+                    if(category=='tecnolog%C3%ADa'){
+                        var bc = $('#tecnologia_count')
+                        if(bc.text() == 1){
+                            location.reload();
+                        } else {
+                            bc.text(parseInt(bc.text())-1)
+                        }
+                    }
+                    if(category=='psicolog%C3%ADa'){
+                        var bc = $('#psicologia_count')
+                        if(bc.text() == 1){
+                            location.reload();
+                        } else {
+                            bc.text(parseInt(bc.text())-1)
+                        }
+                    }
+                    if(category=='medicina'){
+                        var bc = $('#medicina_count')
+                        if(bc.text() == 1){
+                            location.reload();
+                        } else {
+                            bc.text(parseInt(bc.text())-1)
+                        }
+                    }
                 } else {
                     alert("Ha ocurrido un error, por favor intenta más tarde");
                 }
@@ -29,10 +66,47 @@
                 span_text.lastIndexOf("&")
             );
 
+            var category = span_text.substring(
+                span_text.lastIndexOf("category=") + 9, 
+                span_text.length
+            );
+
             $.get("/deny?"+$(this).find('span').text(), function(data, status){
                 if(data.response == 200) {
                     alert("Publicación denegada");
                     $('#'+id).hide()
+                    if(category=='business'){
+                        var bc = $('#business_count')
+                        if(bc.text() == 1){
+                            location.reload();
+                        } else {
+                            bc.text(parseInt(bc.text())-1)
+                        }
+                    }
+                    if(category=='tecnolog%C3%ADa'){
+                        var bc = $('#tecnologia_count')
+                        if(bc.text() == 1){
+                            location.reload();
+                        } else {
+                            bc.text(parseInt(bc.text())-1)
+                        }
+                    }
+                    if(category=='psicolog%C3%ADa'){
+                        var bc = $('#psicologia_count')
+                        if(bc.text() == 1){
+                            location.reload();
+                        } else {
+                            bc.text(parseInt(bc.text())-1)
+                        }
+                    }
+                    if(category=='medicina'){
+                        var bc = $('#medicina_count')
+                        if(bc.text() == 1){
+                            location.reload();
+                        } else {
+                            bc.text(parseInt(bc.text())-1)
+                        }
+                    }
                 } else {
                     alert("Ha ocurrido un error, por favor intenta más tarde");
                 }
@@ -93,7 +167,7 @@ BUSINESS
             <p>No hay posts de Business pendientes de revisar</p>
          </div>
      {% endif %}
-
+    <span hidden id="business_count">{{count.value}}</span>
     </div>
 
  {% else %}
@@ -161,6 +235,7 @@ MEDICINA
             <p>No hay posts de Medicina pendientes de revisar</p>
          </div>
      {% endif %}
+     <span hidden id="medicina_count">{{count.value}}</span>
 
     </div>
 
@@ -229,6 +304,7 @@ PSICOLOGÍA
             <p>No hay posts de Psicología pendientes de revisar</p>
          </div>
      {% endif %}
+     <span hidden id="psicologia_count">{{count.value}}</span>
 
     </div>
 
@@ -299,6 +375,7 @@ TECNOLOGÍA
             <p>No hay posts de Tecnología pendientes de revisar</p>
          </div>
      {% endif %}
+     <span hidden id="tecnologia_count">{{count.value}}</span>
 
     </div>
 
