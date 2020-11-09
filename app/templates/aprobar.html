@@ -8,14 +8,14 @@
         $(".aprobar").click(function(){
             var span_text = $(this).find('span').text();
             var id = span_text.substring(
-                span_text.lastIndexOf("-") + 1, 
+                span_text.lastIndexOf("post=") + 5, 
                 span_text.lastIndexOf("&")
             );
 
             $.get("/approve?"+$(this).find('span').text(), function(data, status){
                 if(data.response == 200) {
                     alert("Publicación aprobada");
-                    $('#-'+id).hide()
+                    $('#'+id).hide()
                 } else {
                     alert("Ha ocurrido un error, por favor intenta más tarde");
                 }
@@ -25,14 +25,14 @@
         $(".denegar").click(function(){
             var span_text = $(this).find('span').text();
             var id = span_text.substring(
-                span_text.lastIndexOf("-") + 1, 
+                span_text.lastIndexOf("post=") + 5, 
                 span_text.lastIndexOf("&")
             );
 
             $.get("/deny?"+$(this).find('span').text(), function(data, status){
                 if(data.response == 200) {
                     alert("Publicación denegada");
-                    $('#-'+id).hide()
+                    $('#'+id).hide()
                 } else {
                     alert("Ha ocurrido un error, por favor intenta más tarde");
                 }
