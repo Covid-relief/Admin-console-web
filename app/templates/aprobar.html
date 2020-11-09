@@ -48,10 +48,10 @@ BUSINESS
  {% if business %}
 
      <div id="container" align="center">
-
+    {% set count = namespace(value=0) %}
     {% for p in business %}
         {% if p.Estado == "evaluate" %}
-
+        {% set count.value = count.value + 1 %}
 
             <div id="{{p.ID}}" class="card" style="width: 450px">
                 <h5 class="card-title">{{p.Titulo}}</h5>
@@ -87,6 +87,13 @@ BUSINESS
 
    {% endfor %}
 
+     {% if  count.value == 0%}
+         <div class="noposts">
+            <img src="../static/assets/2404627.svg" />
+            <p>No hay posts de Business pendientes de revisar</p>
+         </div>
+     {% endif %}
+
     </div>
 
  {% else %}
@@ -102,20 +109,22 @@ BUSINESS
 MEDICINA
 -->
 
-    <h1 align="left">Medicina</h1>
+     <h1 align="left">Medicina</h1>
 
-    {% if medicina %}
+ {% if medicina %}
 
      <div id="container" align="center">
 
+    {% set count = namespace(value=0) %}
     {% for p in medicina %}
         {% if p.Estado == "evaluate" %}
+        {% set count.value = count.value + 1 %}
 
 
-            <div class="card" style="width: 450px">
+            <div id="{{p.ID}}" class="card" style="width: 450px">
                 <h5 class="card-title">{{p.Titulo}}</h5>
                 <p style="color:gray">{{p.Fecha}}</p>
-                
+
                 {% if p.Imagen %}
                     <img class="card-img-top" src="{{p.Imagen}}" alt="Card image cap" style="width: 450px; height: 450px" >
                 {% endif %}
@@ -136,17 +145,22 @@ MEDICINA
 
                     <p class="card-text">{{p.Descripcion}}</p>
                     <div>
-                        <a href="#" class="btn btn-success btn-lg">Aprobar</a>
-                        <a href="#" class="btn btn-danger btn-lg">Denegar</a>
+                        <a class="btn btn-success btn-lg aprobar"><span hidden>post={{p.ID}}&category=medicina</span>Aprobar</a>
+                        <a class="btn btn-danger btn-lg denegar"><span hidden>post={{p.ID}}&category=medicina</span>Denegar</a>
                     </div>
                 </div>
             </div>
             <br>
-
-
      {% endif %}
 
    {% endfor %}
+
+     {% if  count.value == 0%}
+         <div class="noposts">
+            <img src="../static/assets/2404627.svg" />
+            <p>No hay posts de Medicina pendientes de revisar</p>
+         </div>
+     {% endif %}
 
     </div>
 
@@ -157,27 +171,28 @@ MEDICINA
      </div>
  {% endif %}
 
-
  <hr/>
 
 <!--
 PSICOLOGÍA
 -->
 
-    <h1 align="left">Psicología</h1>
+     <h1 align="left">Psicología</h1>
 
-    {% if psicologia %}
+ {% if psicologia %}
 
      <div id="container" align="center">
 
+    {% set count = namespace(value=0) %}
     {% for p in psicologia %}
         {% if p.Estado == "evaluate" %}
+        {% set count.value = count.value + 1 %}
 
 
-            <div class="card" style="width: 450px">
+            <div id="{{p.ID}}" class="card" style="width: 450px">
                 <h5 class="card-title">{{p.Titulo}}</h5>
                 <p style="color:gray">{{p.Fecha}}</p>
-                
+
                 {% if p.Imagen %}
                     <img class="card-img-top" src="{{p.Imagen}}" alt="Card image cap" style="width: 450px; height: 450px" >
                 {% endif %}
@@ -198,17 +213,23 @@ PSICOLOGÍA
 
                     <p class="card-text">{{p.Descripcion}}</p>
                     <div>
-                        <a href="#" class="btn btn-success btn-lg">Aprobar</a>
-                        <a href="#" class="btn btn-danger btn-lg">Denegar</a>
+                        <a class="btn btn-success btn-lg aprobar"><span hidden>post={{p.ID}}&category=psicolog%C3%ADa</span>Aprobar</a>
+                        <a class="btn btn-danger btn-lg denegar"><span hidden>post={{p.ID}}&category=psicolog%C3%ADa</span>Denegar</a>
                     </div>
                 </div>
             </div>
             <br>
-
-
      {% endif %}
 
    {% endfor %}
+
+     {% if  count.value == 0%}
+         <div class="noposts">
+            <img src="../static/assets/2404627.svg" />
+            <p>No hay posts de Psicología pendientes de revisar</p>
+         </div>
+     {% endif %}
+
     </div>
 
  {% else %}
@@ -218,7 +239,6 @@ PSICOLOGÍA
      </div>
  {% endif %}
 
-
  <hr/>
 
 
@@ -227,20 +247,22 @@ TECNOLOGÍA
 -->
 
 
-    <h1 align="left">Tecnología</h1>
+     <h1 align="left">Tecnología</h1>
 
-    {% if tecnologia %}
+ {% if tecnologia %}
 
      <div id="container" align="center">
 
+    {% set count = namespace(value=0) %}
     {% for p in tecnologia %}
         {% if p.Estado == "evaluate" %}
+        {% set count.value = count.value + 1 %}
 
 
-            <div class="card" style="width: 450px">
+            <div id="{{p.ID}}" class="card" style="width: 450px">
                 <h5 class="card-title">{{p.Titulo}}</h5>
                 <p style="color:gray">{{p.Fecha}}</p>
-                
+
                 {% if p.Imagen %}
                     <img class="card-img-top" src="{{p.Imagen}}" alt="Card image cap" style="width: 450px; height: 450px" >
                 {% endif %}
@@ -261,19 +283,23 @@ TECNOLOGÍA
 
                     <p class="card-text">{{p.Descripcion}}</p>
                     <div>
-                        <a href="#" class="btn btn-success btn-lg">Aprobar</a>
-                        <a href="#" class="btn btn-danger btn-lg">Denegar</a>
+                        <a class="btn btn-success btn-lg aprobar"><span hidden>post={{p.ID}}&category=tecnolog%C3%ADa</span>Aprobar</a>
+                        <a class="btn btn-danger btn-lg denegar"><span hidden>post={{p.ID}}&category=tecnolog%C3%ADa</span>Denegar</a>
                     </div>
                 </div>
             </div>
             <br>
-
-
-
-
      {% endif %}
 
    {% endfor %}
+
+     {% if  count.value == 0%}
+         <div class="noposts">
+            <img src="../static/assets/2404627.svg" />
+            <p>No hay posts de Tecnología pendientes de revisar</p>
+         </div>
+     {% endif %}
+
     </div>
 
  {% else %}
