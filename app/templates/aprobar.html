@@ -3,7 +3,43 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<script>
+    $(document).ready(function(){
+        $(".aprobar").click(function(){
+            var span_text = $(this).find('span').text();
+            var id = span_text.substring(
+                span_text.lastIndexOf("-") + 1, 
+                span_text.lastIndexOf("&")
+            );
 
+            $.get("/approve?"+$(this).find('span').text(), function(data, status){
+                if(data.response == 200) {
+                    alert("Publicación aprobada");
+                    $('#-'+id).hide()
+                } else {
+                    alert("Ha ocurrido un error, por favor intenta más tarde");
+                }
+            });
+        });
+
+        $(".denegar").click(function(){
+            var span_text = $(this).find('span').text();
+            var id = span_text.substring(
+                span_text.lastIndexOf("-") + 1, 
+                span_text.lastIndexOf("&")
+            );
+
+            $.get("/deny?"+$(this).find('span').text(), function(data, status){
+                if(data.response == 200) {
+                    alert("Publicación denegada");
+                    $('#-'+id).hide()
+                } else {
+                    alert("Ha ocurrido un error, por favor intenta más tarde");
+                }
+            });
+        });
+});
+</script>
 <!--
 BUSINESS
 -->
@@ -17,7 +53,7 @@ BUSINESS
         {% if p.Estado == "evaluate" %}
 
 
-            <div class="card" style="width: 450px">
+            <div id="{{p.ID}}" class="card" style="width: 450px">
                 <h5 class="card-title">{{p.Titulo}}</h5>
                 <p style="color:gray">{{p.Fecha}}</p>
 
@@ -41,13 +77,12 @@ BUSINESS
 
                     <p class="card-text">{{p.Descripcion}}</p>
                     <div>
-                        <a href="/approve?post={{p.ID}}&category=business" class="btn btn-success btn-lg">Aprobar</a>
-                        <a href="#" class="btn btn-danger btn-lg">Denegar</a>
+                        <a class="btn btn-success btn-lg aprobar"><span hidden>post={{p.ID}}&category=business</span>Aprobar</a>
+                        <a class="btn btn-danger btn-lg denegar"><span hidden>post={{p.ID}}&category=business</span>Denegar</a>
                     </div>
                 </div>
             </div>
-        <hr/>
-
+            <br>
      {% endif %}
 
    {% endfor %}
@@ -61,6 +96,7 @@ BUSINESS
      </div>
  {% endif %}
 
+ <hr/>
 
 <!--
 MEDICINA
@@ -105,8 +141,7 @@ MEDICINA
                     </div>
                 </div>
             </div>
-        <hr/>
-
+            <br>
 
 
      {% endif %}
@@ -123,6 +158,7 @@ MEDICINA
  {% endif %}
 
 
+ <hr/>
 
 <!--
 PSICOLOGÍA
@@ -167,8 +203,7 @@ PSICOLOGÍA
                     </div>
                 </div>
             </div>
-        <hr/>
-
+            <br>
 
 
      {% endif %}
@@ -184,6 +219,7 @@ PSICOLOGÍA
  {% endif %}
 
 
+ <hr/>
 
 
 <!--
@@ -230,8 +266,7 @@ TECNOLOGÍA
                     </div>
                 </div>
             </div>
-        <hr/>
-
+            <br>
 
 
 
@@ -248,5 +283,6 @@ TECNOLOGÍA
      </div>
  {% endif %}
 
+ <hr/>
 
 {% endblock %}

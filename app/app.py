@@ -212,7 +212,7 @@ def approve():
     else:
         print(str(resp.status_code) + " " + str(resp))
         print(result)
-    return ""
+    return {'response':400}
 
 @app.route("/deny")
 def deny():
