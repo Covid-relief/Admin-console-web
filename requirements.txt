@@ -7,3 +7,4 @@ python-firebase
 pyrebase
 firebase
 jinja2
+pyfcm
