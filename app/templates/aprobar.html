@@ -19,18 +19,20 @@
 
             $.get("/approve?"+$(this).find('span').text(), function(data, status){
                 if(data.response == 200) {
+                    $.get("/notification", function(data, status){
+                        console.log(data)
+                    })
                     alert("Publicación aprobada");
                     $('#'+id).hide()
                     if(category=='business'){
                         var bc = $('#business_count')
                         if(bc.text() == 1){
 
-                            $.get("/notification", function(data, status){
-                                console.log(data)
-                            })
-
                             location.reload();
+
+
                         } else {
+
                             bc.text(parseInt(bc.text())-1)
                         }
                     }
@@ -38,11 +40,8 @@
                         var bc = $('#tecnologia_count')
                         if(bc.text() == 1){
 
-                            $.get("/notification", function(data, status){
-                                console.log(data)
-                            })
-
                             location.reload();
+
                         } else {
                             bc.text(parseInt(bc.text())-1)
                         }
@@ -51,11 +50,9 @@
                         var bc = $('#psicologia_count')
                         if(bc.text() == 1){
 
-                            $.get("/notification", function(data, status){
-                                console.log(data)
-                            })
-
                             location.reload();
+
+
                         } else {
                             bc.text(parseInt(bc.text())-1)
                         }
@@ -64,11 +61,8 @@
                         var bc = $('#medicina_count')
                         if(bc.text() == 1){
 
-                            $.get("/notification", function(data, status){
-                                console.log(data)
-                            })
-
                             location.reload();
+
                         } else {
                             bc.text(parseInt(bc.text())-1)
                         }
