@@ -13,6 +13,8 @@
         <li><a href="/estadisticas">Estadísticas</a></li>
         {% endif %}
 
+        <li><a href="/about-us">Sobre nosotros</a></li>
+
         {% if not session["usr"] %}
         <li><a href="/signup">Registro</a></li>
         <li><a href="/login">Iniciar sesión</a></li>
@@ -20,10 +22,6 @@
 
         {% if session["email"] %}
         <li><a style="text-transform: lowercase !important;">{{session["email"]}}</a> </li>
-        {% endif %}
-
-        {% if session["usr"] %}
-        <li><a href="/about-us">Sobre nosotros</a></li>
         {% endif %}
 
         {% if session["usr"] %}

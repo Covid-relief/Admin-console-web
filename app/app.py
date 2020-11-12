@@ -70,13 +70,6 @@ def test():
 
 @app.route("/aprobar")
 def aprobar():
-    push_service = FCMNotification(
-        api_key="AAAA4N0M60I:APA91bHGmWiGRCEO4mZABGz1cKyjt9lt-T_wd8CY2tF5DhXr0SNcpFdgrMMa67tM04NwI6koQWAdL7X6mPY4U5ZEs0rnW5qnmJ36oMjJHpXx6gz7OHJpobPZeOeFJxvNYAl7LceY-kEL")
-    message_title = "Nueva publicación"
-    message_body = "Te invitamos a revisar la aplicación"
-    result = push_service.notify_topic_subscribers(topic_name="publicaciones",
-                                                            message_body=message_body,
-                                                            message_title=message_title)
 
     business = []
     business_keys = []
@@ -130,8 +123,18 @@ def aprobar():
 
     # print(allposts.val(), file=sys.stderr)
     return render_template("aprobar.html", business=business, medicina=medicina, psicologia=psicologia,
-                           tecnologia=tecnologia, result=result)
+                           tecnologia=tecnologia)
 
+@app.route("/notification")
+def notification():
+    push_service = FCMNotification(
+        api_key="AAAA4N0M60I:APA91bHGmWiGRCEO4mZABGz1cKyjt9lt-T_wd8CY2tF5DhXr0SNcpFdgrMMa67tM04NwI6koQWAdL7X6mPY4U5ZEs0rnW5qnmJ36oMjJHpXx6gz7OHJpobPZeOeFJxvNYAl7LceY-kEL")
+    message_title = "Nueva publicación"
+    message_body = "Te invitamos a revisar la aplicación"
+    result = push_service.notify_topic_subscribers(topic_name="publicaciones",
+                                                   message_body=message_body,
+                                                   message_title=message_title)
+    return result
 
 @app.route("/estadisticas")
 def estadisticas():
